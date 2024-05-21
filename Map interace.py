@@ -1,4 +1,5 @@
 import tkinter as tk
+from PIL import Image, ImageTk
 
 
 class Nava:
@@ -54,14 +55,32 @@ class Jucator:
 
 class JocBattleship:
     def __init__(self):
+        self.image_label = None
+        self.photo = None
         self.jucator1 = Jucator("Jucator 1")
         self.jucator2 = Jucator("Jucator 2")
         self.jucator_activ = self.jucator1
         self.jucator_inactiv = self.jucator2
         self.root = tk.Tk()
         self.root.title("Battleship")
-        self.canvas = tk.Canvas(self.root, width=500, height=500)
-        self.canvas.pack()
+
+        # Creează frame-ul principal care conține atât canvas-ul cât și imaginea
+        self.main_frame = tk.Frame(self.root)
+        self.main_frame.pack()
+
+        # Canvas pentru grid-ul de joc
+        self.canvas = tk.Canvas(self.main_frame, width=500, height=500)
+        self.canvas.pack(side="left")
+
+        # Imaginea pentru secțiunea de imagine
+        self.image_frame = tk.Frame(self.main_frame, width=200, height=500)
+        self.image_frame.pack(side="right")
+
+        # Încarcă imaginea și o convertește în PhotoImage
+        self.load_image()
+
+        self.afisare_imagine()
+
         self.canvas.bind("<Button-1>", self.click)
 
         self.faza = "plasare"
@@ -181,6 +200,24 @@ class JocBattleship:
             dimensiune = self.nave_de_plasat[0]
             nume_nava = self.nume_nave[dimensiune]
             self.nava_label.config(text=f"{self.jucator_activ.nume} selectează {nume_nava} ({dimensiune} pătrate).")
+
+    def load_image(self):
+        # Încarcă imaginea folosind PIL (Pillow)
+        image = Image.open("Radar.png")
+
+        # Redimensionează imaginea pentru a se potrivi cu dimensiunea frame-ului
+        image = image.resize((300, 400), Image.LANCZOS)
+
+        # Convertirea imaginii într-un obiect PhotoImage
+        self.photo = ImageTk.PhotoImage(image)
+
+    # noinspection PyTypeChecker
+    def afisare_imagine(self):
+        # Adăugarea imaginii pe canvas
+        self.canvas.create_image(800, 250, anchor=tk.CENTER, image=self.photo)
+        self.image_label = tk.Label(self.image_frame, image=self.photo)
+        self.image_label.image = self.photo  # Reține o referință către imagine pentru a preveni garbage collection
+        self.image_label.pack()
 
     def start(self):
         self.root.mainloop()

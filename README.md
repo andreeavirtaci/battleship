@@ -2,7 +2,7 @@
 Jocul Battleship a fost implementat de Virtaci Andreea, Vasile Cristiana, Sitea Cristi
 
 INSTRUCTIUNI:
-Jocul poate fi jucat in 2 moduri: 1 jucator VS 1 jucator sau 1 jucator VS computer
+Jocul poate fi jucat in 2 moduri: 1 jucator VS 1 jucator sau 1 jucator VS computer \n
 Fiecare jucator are 2 tipuri de nave de plasat: una de 2 patratele, una de 3 patratele si una de 4 patratele
 O nava poate fi amplasatata dupa cateva criterii: jucatorul va alege pozitia primului patratel al navei (ex C4) apoi va alege directia in care mapa sa fie aseazata, adica deasupra, sub,
 la dreapta sau la stanga. 

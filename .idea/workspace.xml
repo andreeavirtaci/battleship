@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="28841fde-5d8e-47aa-a493-0040ee772c9d" name="Changes" comment="adaugare un buton de renuntare">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="28841fde-5d8e-47aa-a493-0040ee772c9d" name="Changes" comment="adaugare un buton de renuntare" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,7 +42,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-09665e90c3a7-b11f5e8da5ad-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.15026.15" />
+        <option value="bundled-python-sdk-d68999036c7f-b11f5e8da5ad-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.14475.56" />
       </set>
     </attachedChunks>
   </component>
@@ -61,6 +59,7 @@
       <workItem from="1716146217681" duration="43000" />
       <workItem from="1716566821811" duration="116000" />
       <workItem from="1716579336135" duration="2000" />
+      <workItem from="1716660032484" duration="31000" />
     </task>
     <task id="LOCAL-00001" summary="adaugare 2 butoane de inceput pt alegerea modului de joc 1vs1 sau 1vscomputer">
       <option name="closed" value="true" />

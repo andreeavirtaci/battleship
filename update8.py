@@ -1,7 +1,6 @@
 import tkinter as tk
 import random
 
-
 class Nava:
     def __init__(self, dimensiune):
         self.coordonate = None
@@ -23,22 +22,14 @@ class Nava:
             for i in range(self.dimensiune):
                 self.coordonate.append((start_x - i, start_y))
 
-
 class Jucator:
-    def __init__(self, nume, is_computer=False):
+    def __init__(self, nume):
         self.nume = nume
-        self.is_computer = is_computer
-        self.is_computer_turn = False  # Variabilă pentru a ține evidența rândului computerului
         self.nave = []
         self.harta = [['' for _ in range(8)] for _ in range(8)]
         self.harta_atac = [['' for _ in range(8)] for _ in range(8)]
-        self.__harta_computer = [['' for _ in range(8)] for _ in range(8)]  # Harta computerului, accesibilă doar intern
 
     def plaseaza_nava(self, start_x, start_y, dimensiune, directie):
-        # Verificăm dacă este rândul computerului; dacă da, returnăm False
-        if self.is_computer and self.is_computer_turn:
-            return False
-
         nava = Nava(dimensiune)
         if self.verifica_pozitionare(start_x, start_y, dimensiune, directie):
             nava.pozitioneaza(start_x, start_y, directie)
@@ -96,20 +87,19 @@ class Jucator:
             self.harta_atac[x][y] = '0'
             return False
 
-
 class JocBattleship:
     def __init__(self):
         self.jucator1 = Jucator("Jucator 1")
-        self.jucator2 = Jucator("Computer", is_computer=True)
+        self.jucator2 = Jucator("Computer")
         self.jucator_activ = self.jucator1
         self.jucator_inactiv = self.jucator2
+        self.mod_joc = None
         self.root = tk.Tk()
         self.root.title("Battleship")
 
         self.faza = "selectie"
         self.mode_select_window()
 
-    # ca sa poti alege modul de joc
     def mode_select_window(self):
         self.select_frame = tk.Frame(self.root)
         self.select_frame.pack(pady=20)
@@ -123,25 +113,19 @@ class JocBattleship:
         self.button_1vs_computer = tk.Button(self.select_frame, text="1 vs Computer", command=self.start_1vs_computer)
         self.button_1vs_computer.pack(side=tk.LEFT, padx=10)
 
-#pt 1vs1
-    # pt 1vs1
     def start_1vs1(self):
+        self.mod_joc = "1vs1"
         self.select_frame.destroy()
         self.setup_game()
 
-    # pt 1vscomputer
     def start_1vs_computer(self):
+        self.mod_joc = "1vs_computer"
         self.select_frame.destroy()
         self.setup_game_computer()
 
-    # aici urmeaza implementarea 1vscomputer
     def setup_game_computer(self):
         self.plaseaza_nave_aleatoriu(self.jucator2)
         self.setup_game()
-        # Dezactivăm intrările de date în timpul plasării navelor computerului
-        self.entry_coord.config(state="disabled")
-        self.entry_orientare.config(state="disabled")
-        self.button_plaseaza.config(state="disabled")
 
     def plaseaza_nave_aleatoriu(self, jucator):
         for dimensiune in [2, 3, 4]:
@@ -151,8 +135,6 @@ class JocBattleship:
                 directie = random.choice(['sus', 'jos', 'stanga', 'dreapta'])
                 if jucator.plaseaza_nava(start_x, start_y, dimensiune, directie):
                     break
-                else:
-                    continue
 
     def setup_game(self):
         self.canvas = tk.Canvas(self.root, width=500, height=500)
@@ -178,7 +160,6 @@ class JocBattleship:
         self.button_plaseaza = tk.Button(self.placare_frame, text="Plasează nava", command=self.plaseaza_nava)
         self.button_plaseaza.grid(row=2, column=0)
 
-        # Butonul de renuntare
         self.button_renunta = tk.Button(self.placare_frame, text="Renuntare", command=self.renunta)
         self.button_renunta.grid(row=2, column=1)
 
@@ -190,7 +171,6 @@ class JocBattleship:
 
         self.actualizeaza_mesaj()
 
-        # Butonul de ajutor
         self.help_button = tk.Button(self.root, text="HELP", command=self.show_help)
         self.help_button.pack()
 
@@ -230,7 +210,7 @@ class JocBattleship:
                 self.actualizeaza_mesaj()
                 self.afisare_harta(self.jucator_activ)
                 if not self.nave_de_plasat:
-                    if self.jucator_activ == self.jucator1:
+                    if self.mod_joc == "1vs1" and self.jucator_activ == self.jucator1:
                         self.mesaj_label.config(text="Randul jucătorului 2")
                         self.afiseaza_fereastra_randul_jucatorului_2()
                     else:
@@ -240,7 +220,6 @@ class JocBattleship:
             else:
                 self.mesaj_label.config(text="Pozitionare invalidă!")
 
-    # Pentru a afișa fereastra de schimbare a jucătorului
     def afiseaza_fereastra_randul_jucatorului_2(self):
         self.fereastra_randul2 = tk.Toplevel(self.root)
         self.fereastra_randul2.title("Schimbare jucător")
@@ -268,26 +247,14 @@ class JocBattleship:
         self.button_ataca = tk.Button(self.atac_frame, text="Atacă", command=self.ataca)
         self.button_ataca.grid(row=1, column=0, columnspan=2)
 
-        # Verificăm dacă este rândul jucătorului uman sau al computerului
-        if self.jucator_activ == self.jucator2:
-            # Dezactivăm intrările de date pentru rândul computerului
-            self.entry_pozitie.config(state="disabled")
-            self.button_ataca.config(state="disabled")
-        else:
-            # Activăm intrările de date pentru jucătorul uman
-            self.entry_pozitie.config(state="normal")
-            self.button_ataca.config(state="normal")
-
     def afisare_harta(self, jucator):
         self.canvas.delete("all")
         for i in range(8):
             for j in range(8):
-                self.canvas.create_rectangle(j * 50 + 50, i * 50 + 50, (j + 1) * 50 + 50, (i + 1) * 50 + 50,
-                                             fill="white")
+                self.canvas.create_rectangle(j * 50 + 50, i * 50 + 50, (j + 1) * 50 + 50, (i + 1) * 50 + 50, fill="white")
                 if jucator.harta[i][j] == 'O':
                     culoare = "blue" if jucator == self.jucator1 else "red"
-                    self.canvas.create_rectangle(j * 50 + 50, i * 50 + 50, (j + 1) * 50 + 50, (i + 1) * 50 + 50,
-                                                 fill=culoare)
+                    self.canvas.create_rectangle(j * 50 + 50, i * 50 + 50, (j + 1) * 50 + 50, (i + 1) * 50 + 50, fill=culoare)
                 elif jucator.harta[i][j] == 'X':
                     self.canvas.create_text(j * 50 + 75, i * 50 + 75, text="X", fill="black", font=("Arial", 24))
                 elif jucator.harta[i][j] == '0':
@@ -312,8 +279,7 @@ class JocBattleship:
     def show_help(self):
         help_window = tk.Toplevel(self.root)
         help_window.title("Ajutor")
-        help_label = tk.Label(help_window,
-                              text="Above(A)-scrii litera A\nBelow(B)-scrii litera B\nRight(R)-scrii litera R\nLeft(L)-scrii litera L\n")
+        help_label = tk.Label(help_window, text="Above(A)-scrii litera A\nBelow(B)-scrii litera B\nRight(R)-scrii litera R\nLeft(L)-scrii litera L\n")
         help_label.pack()
 
     def ataca(self):
@@ -334,6 +300,10 @@ class JocBattleship:
             self.mesaj_label.config(text="Poziția este în afara grilei!")
             return
 
+        if self.jucator_activ.harta_atac[x][y] in ['X', '0']:
+            self.mesaj_label.config(text="Pozitie introdusa deja!")
+            return
+
         self.fereastra_atac(x, y)
 
     def fereastra_atac(self, x, y):
@@ -347,40 +317,53 @@ class JocBattleship:
 
         for i in range(8):
             for j in range(8):
-                canvas_atac.create_rectangle(j * 50 + 50, i * 50 + 50, (j + 1) * 50 + 50, (i + 1) * 50 + 50,
-                                             fill="white")
+                canvas_atac.create_rectangle(j * 50 + 50, i * 50 + 50, (j + 1) * 50 + 50, (i + 1) * 50 + 50, fill="white")
                 if self.jucator_activ.harta_atac[i][j] == 'X':
                     canvas_atac.create_text(j * 50 + 75, i * 50 + 75, text="X", fill="black", font=("Arial", 24))
                 elif self.jucator_activ.harta_atac[i][j] == '0':
                     canvas_atac.create_text(j * 50 + 75, i * 50 + 75, text="0", fill="black", font=("Arial", 24))
-                elif hit and i == x and j == y:
-                    canvas_atac.create_text(j * 50 + 75, i * 50 + 75, text="X", fill="black", font=("Arial", 24))
-                elif not hit and i == x and j == y:
-                    canvas_atac.create_text(j * 50 + 75, i * 50 + 75, text="0", fill="black", font=("Arial", 24))
-                    if hit:
-                        tk.Label(fereastra, text=f"{self.jucator_activ.nume} a lovit o navă!",
-                                 font=("Arial", 16)).pack()
-                    else:
-                        tk.Label(fereastra, text=f"{self.jucator_activ.nume} a ratat!", font=("Arial", 16)).pack()
 
-                    self.fereastra_atribuie_atac()
+        for i in range(8):
+            canvas_atac.create_text(25, i * 50 + 75, text=str(i + 1))
+            canvas_atac.create_text(i * 50 + 75, 25, text=chr(65 + i))
 
-    def fereastra_atribuie_atac(self):
-        fereastra_2 = tk.Toplevel(self.root)
-        fereastra_2.title(f"Schimbare jucător")
-
-        if self.jucator_activ == self.jucator1:
-            tk.Label(fereastra_2, text="Randul jucătorului 2", font=("Arial", 16)).pack(padx=20, pady=20)
+        if hit:
+            self.mesaj_label.config(text=f"{self.jucator_activ.nume} a lovit o navă!")
         else:
-            tk.Label(fereastra_2, text="Randul jucătorului 1", font=("Arial", 16)).pack(padx=20, pady=20)
+            self.mesaj_label.config(text=f"{self.jucator_activ.nume} a ratat!")
+            self.root.after(2000, self.schimba_jucator)
 
-        button_ok = tk.Button(fereastra_2, text="OK", command=self.treci_la_jucatorul_atac)
+        if self.verifica_castigator(self.jucator_inactiv):
+            self.afiseaza_mesaj_castigator()
+        else:
+            self.root.after(2000, fereastra.destroy)
+
+    def schimba_jucator(self):
+        self.jucator_activ, self.jucator_inactiv = self.jucator_inactiv, self.jucator_activ
+        self.afisare_harta(self.jucator_activ)
+        if self.faza == "plasare":
+            self.actualizeaza_mesaj()
+
+    def verifica_castigator(self, jucator):
+        for i in range(8):
+            for j in range(8):
+                if jucator.harta[i][j] == 'O':
+                    return False
+        return True
+
+    def afiseaza_mesaj_castigator(self):
+        fereastra_castigator = tk.Toplevel(self.root)
+        fereastra_castigator.title("Joc câștigat")
+
+        mesaj = tk.Label(fereastra_castigator, text=f"{self.jucator_activ.nume} a câștigat jocul!", font=("Arial", 16))
+        mesaj.pack(padx=20, pady=20)
+
+        button_ok = tk.Button(fereastra_castigator, text="OK", command=self.inchide_joc)
         button_ok.pack(pady=10)
 
-    def treci_la_jucatorul_atac(self):
-        self.jucator_activ, self.jucator_inactiv = self.jucator_inactiv, self.jucator_activ
-        self.root.quit()
-        self.root.withdraw()
-        self.start()
+    def inchide_joc(self):
+        self.root.destroy()
+
+# Rulează jocul
 joc = JocBattleship()
 joc.start()

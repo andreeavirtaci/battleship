@@ -1,6 +1,5 @@
 import tkinter as tk
 import random
-
 class Nava:
     def __init__(self, dimensiune):
         self.coordonate = None

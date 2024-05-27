@@ -16,4 +16,6 @@ la dreapta sau la stanga.
 6. Daca jucatorul a introdus o pozitie in faza de atac (de ex A3) daca pe pozitia respectiva exista o parte din nava jucatorului va aparea o fereastra cu un X ca inseamna nava lovita sau cu un 0 care inseamna nava ratata pe pozitia respectiva (A3)
 
 7. Daca jucatorul reuseste sa-si loveasca adversarul mai are o incercare pana ratateaza, in caz de ratare de la inceput va veni randul celuilalt jucator si tot asa
+  
+8. Un jucator castiga atunci cand a lovit si scufundat toate navele celuilalt jucator
 

@@ -371,7 +371,6 @@ class JocBattleship:
 
     def inchide_joc(self):
         self.root.destroy()
-
 # Rulează jocul
 joc = JocBattleship()
 joc.start()

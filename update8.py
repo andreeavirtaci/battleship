@@ -100,6 +100,8 @@ class JocBattleship:
         self.faza = "selectie"
         self.mode_select_window()
 
+
+    #ca sa poti alege modul de joc
     def mode_select_window(self):
         self.select_frame = tk.Frame(self.root)
         self.select_frame.pack(pady=20)
@@ -113,11 +115,14 @@ class JocBattleship:
         self.button_1vs_computer = tk.Button(self.select_frame, text="1 vs Computer", command=self.start_1vs_computer)
         self.button_1vs_computer.pack(side=tk.LEFT, padx=10)
 
+
+    #pentru 1vs1
     def start_1vs1(self):
         self.mod_joc = "1vs1"
         self.select_frame.destroy()
         self.setup_game()
 
+    #pentru 1vscomputer
     def start_1vs_computer(self):
         self.mod_joc = "1vs_computer"
         self.select_frame.destroy()
@@ -220,6 +225,8 @@ class JocBattleship:
             else:
                 self.mesaj_label.config(text="Pozitionare invalidă!")
 
+    
+    #sa se afiseze cand se schimba jucatorul
     def afiseaza_fereastra_randul_jucatorului_2(self):
         self.fereastra_randul2 = tk.Toplevel(self.root)
         self.fereastra_randul2.title("Schimbare jucător")
@@ -228,6 +235,8 @@ class JocBattleship:
         button_ok = tk.Button(self.fereastra_randul2, text="OK", command=self.treci_la_jucatorul_2)
         button_ok.pack(pady=10)
 
+
+    #sa se schimbe jucatorul
     def treci_la_jucatorul_2(self):
         self.jucator_activ, self.jucator_inactiv = self.jucator_inactiv, self.jucator_activ
         self.nave_de_plasat = [2, 3, 4]
@@ -270,18 +279,24 @@ class JocBattleship:
             nume_nava = self.nume_nave[dimensiune]
             self.nava_label.config(text=f"{self.jucator_activ.nume} selectează {nume_nava} ({dimensiune} pătrate).")
 
+
+    #butonul pentru renuntare
     def renunta(self):
         self.root.destroy()
 
     def start(self):
         self.root.mainloop()
 
+
+    #fereastra cu buton de ajutor
     def show_help(self):
         help_window = tk.Toplevel(self.root)
         help_window.title("Ajutor")
         help_label = tk.Label(help_window, text="Above(A)-scrii litera A\nBelow(B)-scrii litera B\nRight(R)-scrii litera R\nLeft(L)-scrii litera L\n")
         help_label.pack()
 
+
+    #atacul si mai jos cu fereastra 
     def ataca(self):
         pozitie_text = self.entry_pozitie.get().upper()
 
